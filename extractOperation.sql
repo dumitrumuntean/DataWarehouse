@@ -21,6 +21,8 @@ select    MEMBERNO,
             select * from taMember where memberno not in (select memberno from YESTERDAYTAMEMBER)
           );
 
+
+
 --deleted = yesterday PK - today PK   
 insert into CHANGEDTAMEMBER
 select    MEMBERNO,
