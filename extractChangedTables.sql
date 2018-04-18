@@ -1,7 +1,7 @@
-drop table yestedayTaFlightsSG70;
-create table yestedayTaFlightsSG70 as (select *
+drop table yesterdayTaFlightsSG70;
+create table yesterdayTaFlightsSG70 as (select *
                                       from taFlightsSG70 where 1 = 0);
-alter table yestedayTaFlightsSG70
+alter table yesterdayTaFlightsSG70
   add  constraint coPKyestedayTaFlightsSG70 
   primary key (LaunchTime, LandingTime, PlaneRegistration);
 
@@ -32,7 +32,14 @@ create table yesterdayTaRegion as (select *
 alter table yesterdayTaRegion
   add  constraint coPKyesterdayTaRegion
   primary key (Name);
-  
+
+drop table yesterdayExtPlanes;
+create table yesterdayExtPlanes as( select *
+                                        from extplanes where 1=0);
+
+drop table yesterdayExtClass;
+create table yesterdayExtClass as( select *
+                                        from extClass where 1=0);
 --------------------------------------------------------------------------
 drop table changedTaFlightsSG70;
 create table changedTaFlightsSG70 as (select *
@@ -78,5 +85,13 @@ alter table changedTaRegion add operation varchar(10);
 alter table changedTaRegion
   add  constraint coPKchangedTaRegion
   primary key (Name);
-  
-  
+
+drop table changedExtPlanes;
+create table changedExtPlanes as( select *
+                                        from extplanes where 1=0);
+alter table changedExtPlanes add operation varchar(10);
+
+drop table changedExtClass;
+create table changedExtClass as( select *
+                                        from extClass where 1=0);
+alter table changedExtClass add operation varchar(10);
