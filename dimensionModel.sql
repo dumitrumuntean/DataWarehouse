@@ -1,11 +1,12 @@
-drop table D_LounchMethod;
-create table D_LounchMethod(
+
+drop table D_LaunchMethod;
+create table D_LaunchMethod(
 id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
-lounch_method varchar2(20),
+launch_method varchar2(20),
 primary key(id)
 );
 
-drop table d_club;
+drop table d_club cascade constraints;
 
 create table d_club(
 id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
@@ -16,13 +17,13 @@ region varchar2(50),
 primary key (id)
 );
 
-drop table d_member;
+drop table d_member cascade constraints;
 create table d_member(
 id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1) ,
 primary key(id)
 );
 
-drop table d_memberprofile;
+drop table d_memberprofile cascade constraints;
 create table d_memberprofile(
 id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1) ,
 member_id integer,
@@ -34,7 +35,7 @@ sex char(1) constraint sex_constraint check(sex in('M','F')),
 primary key(id)
 );
 
-drop table d_plane;
+drop table d_plane cascade constraints;
 create table d_plane(
 id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
 registration varchar2(20),
@@ -45,23 +46,23 @@ class varchar2(20),
 primary key (id)
 );
 
-drop table f_flight;
+drop table f_flight cascade constraints;
 create table  f_flight(
 id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
 d_club integer,
 d_plane integer,
-lounch_time integer,
+launch_time integer,
 landing_time integer,
 ddate integer,
 primary key(id),
 constraint fk_club foreign key(d_club) references d_club(id),
 constraint fk_plane foreign key(d_plane) references d_plane(id),
-constraint fk_lounch foreign key (lounch_time) references d_time(id),
+constraint fk_launch foreign key (launch_time) references d_time(id),
 constraint fk_landing foreign key (landing_time) references d_time(id),
 constraint fk_date foreign key (ddate) references d_date(id)
 );
 
-drop table f_membership;
+drop table f_membership cascade constraints;
 create table f_membership(
 id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
 member_id integer,
@@ -75,7 +76,7 @@ constraint fk_datefrom foreign key(date_from) references d_date(id),
 constraint fk_dateto foreign key(date_to) references d_date(id)
 );
 
-drop table f_ownership;
+drop table f_ownership cascade constraints;
 create table f_ownership(
 id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
 member_id integer,
@@ -89,7 +90,7 @@ constraint fk_from foreign key(date_from) references d_date(id),
 constraint fk_to foreign key(date_to) references d_date(id)
 );
 
-drop table f_club_ownership;
+drop table f_club_ownership cascade constraints;
 create table f_club_ownership(
 id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
 club_id integer,
