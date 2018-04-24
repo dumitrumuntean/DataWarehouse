@@ -32,6 +32,8 @@ last_name varchar2(20),
 age decimal(3,1),
 member_status varchar2(50),
 sex char(1) constraint sex_constraint check(sex in('M','F')),
+validFrom date,
+validTo date,
 primary key(id)
 );
 
