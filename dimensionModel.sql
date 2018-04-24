@@ -19,14 +19,14 @@ primary key (id)
 
 drop table d_member cascade constraints;
 create table d_member(
-id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1) ,
-primary key(id)
+memberno number(6,0),
+primary key(memberno)
 );
 
 drop table d_memberprofile cascade constraints;
 create table d_memberprofile(
 id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1) ,
-member_id integer,
+member_no number(6,0) references d_member(memberno),
 first_name varchar2(20),
 last_name varchar2(20),
 age decimal(3,1),
@@ -49,10 +49,12 @@ primary key (id)
 );
 
 drop table f_flight cascade constraints;
+
 create table  f_flight(
 id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
 d_club integer,
 d_plane integer,
+member_id number(6,0),
 launch_time integer,
 landing_time integer,
 ddate integer,
@@ -61,6 +63,7 @@ constraint fk_club foreign key(d_club) references d_club(id),
 constraint fk_plane foreign key(d_plane) references d_plane(id),
 constraint fk_launch foreign key (launch_time) references d_time(id),
 constraint fk_landing foreign key (landing_time) references d_time(id),
+constraint fk_memberidd foreign key (member_id) references d_memberprofile(id),
 constraint fk_date foreign key (ddate) references d_date(id)
 );
 
@@ -72,7 +75,7 @@ club_id integer,
 date_from integer,
 date_to integer,
 primary key(id),
-constraint fk_memberid foreign key(member_id) references d_member(id),
+constraint fk_memberid foreign key(member_id) references d_member(memberno),
 constraint fk_clubid foreign key(club_id) references d_club(id),
 constraint fk_datefrom foreign key(date_from) references d_date(id),
 constraint fk_dateto foreign key(date_to) references d_date(id)
@@ -86,7 +89,7 @@ plane_id integer,
 date_from integer,
 date_to integer,
 primary key(id),
-constraint fk_owner_member foreign key(member_id) references d_member(id),
+constraint fk_owner_member foreign key(member_id) references d_member(memberno),
 constraint fk_owns_plane foreign key(plane_id) references d_plane(id),
 constraint fk_from foreign key(date_from) references d_date(id),
 constraint fk_to foreign key(date_to) references d_date(id)

@@ -345,5 +345,3 @@ from dba_tab_cols
 where owner='DWH'
 and table_name='STATUSTAMEMBER';
 */
-select initials, count(*)  from taMember  group by initials;
-
