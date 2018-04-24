@@ -321,11 +321,11 @@ select  MEMBERNO
        ,ZIPCODE
        ,AGE
        ,case
-        when datejoined > dateleft then dateleft
+        when datejoined > dateleft and dateleft is not null then dateleft
         else datejoined
         end
        ,case
-        when  dateleft < datejoined then datejoined
+        when  dateleft < datejoined and dateleft is not null then datejoined
         else dateleft
         end
        ,OWNSPLANEREG
@@ -345,5 +345,5 @@ from dba_tab_cols
 where owner='DWH'
 and table_name='STATUSTAMEMBER';
 */
-select * from taMember where dateborn > DATEJOINED ;
+select initials, count(*)  from taMember  group by initials;
 
