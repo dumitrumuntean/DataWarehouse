@@ -334,7 +334,7 @@ select  MEMBERNO
        ,CLUB
        ,OPERATION FROM STATUSTAMEMBER;
 
-select * from LEFTJOINEDTAMEMBER where memberno=279;
+
  
 /*       
 select case column_id
@@ -344,4 +344,10 @@ select case column_id
 from dba_tab_cols
 where owner='DWH'
 and table_name='STATUSTAMEMBER';
+<<<<<<< HEAD
 */
+=======
+*/
+
+
+>>>>>>> 3c79455b1547e713df558543585943135abb834b
