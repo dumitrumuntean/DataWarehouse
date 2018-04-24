@@ -334,7 +334,7 @@ select  MEMBERNO
        ,CLUB
        ,OPERATION FROM STATUSTAMEMBER;
 
-select * from LEFTJOINEDTAMEMBER where memberno=279;
+
  
 /*       
 select case column_id
@@ -345,5 +345,5 @@ from dba_tab_cols
 where owner='DWH'
 and table_name='STATUSTAMEMBER';
 */
-select initials, count(*)  from taMember  group by initials;
+
 
