@@ -5,7 +5,7 @@ drop table D_DATE cascade constraints;
 create table D_DATE(
   id  NUMBER(10) GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
   d_date date,
-  dayOFWeek varchar(10),
+  dayOFWeek varchar(20),
   primary key(id)
 );
 
@@ -24,5 +24,15 @@ declare
     );
     start_date := start_date + 1;
     end LOOP;
+    
+    -- add end of time
+  insert into D_Date(
+    D_Date,
+    DayOFWeek
+  ) values(
+    to_date('1-JAN-9999'),
+    'END OF TIME'
+  );
+    
     end;  
     /
