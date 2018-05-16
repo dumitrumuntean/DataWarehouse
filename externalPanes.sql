@@ -30,7 +30,3 @@ create table extPlanes
   location ('fly.csv')
    )
    ;
-
-select * 
-  from extPlanes
-  ;
