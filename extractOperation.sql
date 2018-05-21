@@ -7,10 +7,12 @@ select 'Extract process at: ' || to_char(sysdate,'YYYY-MM-DD HH24:MI')
   as extractTime
   from dual
   ;
-select 'Extract Members : '    -- Just showing message  'Extract members:'
+  -- Just showing message  'Extract members:'
+select 'Extract Members : '    
   from dual
   ;
-  select 'Row counts before: '  -- Just showing message 'Row counts before'
+  -- Just showing message 'Row counts before'
+  select 'Row counts before: '  
     from dual
 union all
   
@@ -185,8 +187,8 @@ from CHANGEDTAMEMBER
 --------------------------------------------------------------------------------
 -------Retrieving new, deleted, changed rows from  taclub source table----------
 --------------------------------------------------------------------------------
-
-select 'Extract Club : '  --showing message 'Extract Club: ' 
+--showing message 'Extract Club: '
+select 'Extract Club : '   
   from dual
   ;
   
@@ -775,15 +777,5 @@ truncate table CHANGEDTAREGION;
 --select * from CHANGEDTAMEMBER;
 --select * from YESTERDAYTAFLIGHTSSG70;
 --select * from TAFLIGHTSSG70;
-
-
 --select count(*) from TAFLIGHTSSG70;
 
----------GETING all columns name------------------
---select case column_id
---        when 1 then 'select  ' || column_name
---        else        '       ,' || column_name
---        end
---from dba_tab_cols
---where owner='DWH'
---and table_name='EXTCLASS';

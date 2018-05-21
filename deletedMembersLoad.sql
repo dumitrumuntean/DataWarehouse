@@ -5,6 +5,7 @@ DECLARE
        ,MEMBER_NO
        ,NAME
        ,AGE
+       ,ADDRESS
        ,MEMBER_STATUS
        ,SEX
        ,VALIDFROM

@@ -41,7 +41,6 @@ select  MEMBERNO
        ,OPERATION
        from CHANGEDTAMEMBER;
 
-truncate table CHANGEDTAMEMBER;
 /*
   Select all the members from AGETAMEMBER into VALIDAGETAMEMBER whose
   age is between 18 and 100

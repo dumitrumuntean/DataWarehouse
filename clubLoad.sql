@@ -1,0 +1,33 @@
+/*LOADING NEW CLUBS INTO DIMENSIONAL MODEL*/
+DECLARE
+  CURSOR clubCursor
+  IS
+    (SELECT MANE,
+      ADDRESS,
+      ZIPCODE,
+      REGION
+    FROM CHANGEDTACLUB
+    WHERE OPERATION = 'NEW'
+    );
+  REGIONID NUMBER(10,0);
+BEGIN
+  FOR row IN clubCursor
+  LOOP
+    SELECT ID INTO REGIONID FROM D_REGION WHERE NAME=ROW.REGION;
+    INSERT
+    INTO D_CLUB
+      (
+        CLUB_NAME,
+        ADDRESS,
+        ZIPCODE,
+        REGION
+      )
+      VALUES
+      (
+        ROW.MANE,
+        ROW.ADDRESS,
+        ROW.ZIPCODE,
+        REGIONID
+      );
+  END LOOP;
+END;

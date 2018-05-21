@@ -8,8 +8,11 @@
 @@transformMEMBER
 
 --Load
+@@regionsLoad
+@@clubLoad
 @@newMembersLoad
 @@deletedMembersLoad
 @@changedMembersLoad
+@@planesLoad
 
 truncate table LEFTJOINEDTAMEMBER;

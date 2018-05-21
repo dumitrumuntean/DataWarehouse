@@ -14,7 +14,7 @@ CREATE TABLE d_club
     club_name VARCHAR2(50),
     address   VARCHAR2(100),
     zipcode   INTEGER,
-    region    VARCHAR2(50),
+    region    NUMBER(10,0),
     PRIMARY KEY (id)
   );
 DROP TABLE d_member CASCADE CONSTRAINTS;
@@ -27,8 +27,9 @@ CREATE TABLE d_memberprofile
     id NUMBER GENERATED ALWAYS AS IDENTITY(
     START WITH 1 INCREMENT BY 1) ,
     member_no     NUMBER(6,0) REFERENCES d_member(memberno),
-    name           VARCHAR2(60),
+    name          VARCHAR2(60),
     age           DECIMAL(3,1),
+    address       VARCHAR(50),
     member_status VARCHAR2(50),
     sex           CHAR(1) CONSTRAINT sex_constraint CHECK(sex IN('M','F')),
     validFrom     NUMBER(10,0),
@@ -41,10 +42,8 @@ CREATE TABLE d_plane
     id NUMBER GENERATED ALWAYS AS IDENTITY(
     START WITH 1 INCREMENT BY 1),
     registration VARCHAR2(20),
+    COMPETITIONNO VARCHAR2(10),
     type         VARCHAR2(20),
-    no_of_seats  INTEGER,
-    has_engine   CHAR(1) CONSTRAINT has_engine_constraint CHECK(has_engine IN('Y','N')),
-    class        VARCHAR2(20),
     PRIMARY KEY (id)
   );
 DROP TABLE f_flight CASCADE CONSTRAINTS;
@@ -110,4 +109,39 @@ CREATE TABLE f_club_ownership
     CONSTRAINT fk_club_owns_plane FOREIGN KEY(plane_id) REFERENCES d_plane(id),
     CONSTRAINT fk_dfrom FOREIGN KEY(date_from) REFERENCES d_date(id),
     CONSTRAINT fk_dto FOREIGN KEY(date_to) REFERENCES d_date(id)
+  );
+DROP TABLE D_REGION CASCADE CONSTRAINTS;
+CREATE TABLE D_REGION
+  (
+    ID NUMBER GENERATED ALWAYS AS IDENTITY(
+    START WITH 1 INCREMENT BY 1),
+    NAME VARCHAR2(50),
+    PRIMARY KEY(ID)
+  );
+/*There are only 4(four) launch methods. Therefore,
+we find it a resonable decesion to populate the dimension
+D_LAUNCHMETHOD manually. */
+INSERT
+INTO D_LAUNCHMETHOD
+  (
+    LAUNCH_METHOD
+  )
+  VALUES
+  (
+    'LaunchAerotow'
+  );
+INSERT INTO D_LAUNCHMETHOD
+  (LAUNCH_METHOD
+  ) VALUES
+  ( 'LaunchWinch'
+  );
+INSERT INTO D_LAUNCHMETHOD
+  (LAUNCH_METHOD
+  ) VALUES
+  ( 'LaunchSelfLaunch'
+  );
+INSERT INTO D_LAUNCHMETHOD
+  (LAUNCH_METHOD
+  ) VALUES
+  ( 'CableBreak'
   );
