@@ -4,6 +4,7 @@ DECLARE
     (select  ID
        ,MEMBER_NO
        ,NAME
+       ,INITIALS
        ,AGE
        ,ADDRESS
        ,MEMBER_STATUS

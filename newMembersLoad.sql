@@ -17,6 +17,7 @@ DECLARE
     FROM LEFTJOINEDTAMEMBER
     WHERE operation ='NEW'
     );
+    
   VALIDFROM NUMBER(10,0);
   VALIDTO   NUMBER(10, 0);
 BEGIN
@@ -34,13 +35,15 @@ BEGIN
   FOR row IN membercursor
   LOOP
     INSERT INTO D_MEMBER VALUES
-      (ROW.MEMBERNO
+      (ROW.MEMBERNO      
       );
+      
     INSERT
     INTO D_MEMBERPROFILe
       (
         MEMBER_NO ,
         NAME ,
+        INITIALS,
         AGE ,
         ADDRESS,
         MEMBER_STATUS ,
@@ -52,6 +55,7 @@ BEGIN
       (
         ROW.MEMBERNO,
         ROW.NAME,
+        ROW.INITIALS,
         ROW.AGE,
         ROW.ADDRESS,
         ROW.STATUS,

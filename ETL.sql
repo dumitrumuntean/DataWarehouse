@@ -1,18 +1,19 @@
 /*
-  A script to be runned when ETL is to be performed.
+A script to be runned when ETL is to be performed.
 */
 --Extract
 @@extractOperation
-
 --Tranform
 @@transformMEMBER
-
 --Load
-@@regionsLoad
+@@regionLoad
 @@clubLoad
 @@newMembersLoad
 @@deletedMembersLoad
 @@changedMembersLoad
 @@planesLoad
+/*TRANSFORM FACT FLIGHT*/
+@@validateDurationFlights(Transform)
+@@validatePilotInfoFlights
 
-truncate table LEFTJOINEDTAMEMBER;
+TRUNCATE TABLE LEFTJOINEDTAMEMBER;

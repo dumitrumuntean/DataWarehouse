@@ -396,8 +396,7 @@ select 'Extract FLIGHTS VEJLE : ' -- show message 'Extract FLIGHTS VEJLE'
   ;
   
   select 'Row counts before: '
-    from dual
-union all
+    from dual;
 
 --Display how many rows there are in CHANGEDTAFLIGHTSVEJLE table
 --normally should be 0(zero) before performing extract operation

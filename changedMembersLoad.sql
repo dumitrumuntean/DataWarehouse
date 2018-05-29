@@ -56,6 +56,7 @@ BEGIN
       (
         MEMBER_NO ,
         NAME ,
+        INITIALS,
         AGE ,
         ADDRESS,
         MEMBER_STATUS ,
@@ -67,6 +68,7 @@ BEGIN
       (
         ROW.MEMBERNO,
         ROW.NAME,
+        ROW.INITIALS,
         ROW.AGE,
         ROW.ADDRESS,
         ROW.STATUS,

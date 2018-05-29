@@ -1,118 +1,177 @@
 /*
-   This file is dedicated to create all the necessary tables
-  in order to be able to perform transform operation
+This file is dedicated to create all the necessary tables
+in order to be able to perform transform operation
 */
-
 /*
-  A table which contains information about members 
-  who has invalid age.(18 > age > 100)S
+A table which contains information about members
+who has invalid age.(18 > age > 100)S
 */
-drop table errorAgeTaMember;
-create table errorAgeTaMember as (select * 
-                                        from changedtaMember where 1 = 0);
+DROP TABLE errorAgeTaMember;
+CREATE TABLE errorAgeTaMember AS
+  (SELECT * FROM changedtaMember WHERE 1 = 0
+  );
 /*
-  drop dateborn column
-  add age column
+drop dateborn column
+add age column
 */
-alter table errorAgeTaMember drop column dateborn;
-alter table errorAgeTaMember add age integer;
-
+ALTER TABLE errorAgeTaMember
+DROP column dateborn;
+ALTER TABLE errorAgeTaMember ADD age INTEGER;
 --set primary key
-alter table errorAgeTaMember
-  add  constraint coPKerrorAgeTaMember
-  primary key (MemberNo);
-
+ALTER TABLE errorAgeTaMember ADD CONSTRAINT coPKerrorAgeTaMember PRIMARY KEY (MemberNo);
 /*
-  A table which contains infromation about members 
-  who has valid age. (18 < age < 100)
+A table which contains infromation about members
+who has valid age. (18 < age < 100)
 */
-
-drop table validAgeTaMember;
-create table validAgeTaMember as (select * 
-                                        from changedtaMember where 1 = 0);
+DROP TABLE validAgeTaMember;
+CREATE TABLE validAgeTaMember AS
+  (SELECT * FROM changedtaMember WHERE 1 = 0
+  );
 --set primary key
-alter table validAgeTaMember
-  add  constraint coPKvalidAgeTaMember
-  primary key (MemberNo);
-
+ALTER TABLE validAgeTaMember ADD CONSTRAINT coPKvalidAgeTaMember PRIMARY KEY (MemberNo);
 /*
-  drop dateborn column
-  add age column
+drop dateborn column
+add age column
 */
-alter table  validAgeTaMember drop column dateborn;
-alter table validAgeTaMember add age integer;
-
+ALTER TABLE validAgeTaMember
+DROP column dateborn;
+ALTER TABLE validAgeTaMember ADD age INTEGER;
 /*
-  transform from date of born into age from changed table without validation
-  ,negative ages are set to 0(zero)
+transform from date of born into age from changed table without validation
+,negative ages are set to 0(zero)
 */
-
 /*
-  A table which conatins all the members from
-  CHANGEDTAMEMEBER table with a new column age 
-  instead of date of born column
+A table which conatins all the members from
+CHANGEDTAMEMEBER table with a new column age
+instead of date of born column
 */
-drop table AgeTaMember;
-create table AgeTaMember as (select * 
-                                        from changedtaMember where 1 = 0);
-
+DROP TABLE AgeTaMember;
+CREATE TABLE AgeTaMember AS
+  (SELECT * FROM changedtaMember WHERE 1 = 0
+  );
 --set primary key
-alter table AgeTaMember
-  add  constraint coPKAgeTaMember
-  primary key (MemberNo);
-
+ALTER TABLE AgeTaMember ADD CONSTRAINT coPKAgeTaMember PRIMARY KEY (MemberNo);
 /*
-  drop dateborn column
-  add age column
+drop dateborn column
+add age column
 */
-alter table  AgeTaMember drop column dateborn;
-alter table AgeTaMember add age integer;
-
+ALTER TABLE AgeTaMember
+DROP column dateborn;
+ALTER TABLE AgeTaMember ADD age INTEGER;
 /*
-  Audit table to register how many member had
-  invalid age, and how many of them were aproved
+Audit table to register how many member had
+invalid age, and how many of them were aproved
 */
-drop table ageMemberAudit;
-create table ageMemberAudit(
-  id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
-  a_date date,                --date when ETL was executed
-  total_extracted integer,     --total number of new, changed, deleted members
-  dropped integer,            --number of members with invalid age
-  valid integer,              --number of member with a valid age
-  primary key (id)
+DROP TABLE ageMemberAudit;
+CREATE TABLE ageMemberAudit
+  (
+    id NUMBER GENERATED ALWAYS AS IDENTITY(
+    START WITH 1 INCREMENT BY 1),
+    a_date          DATE,    --date when ETL was executed
+    total_extracted INTEGER, --total number of new, changed, deleted members
+    dropped         INTEGER, --number of members with invalid age
+    valid           INTEGER, --number of member with a valid age
+    PRIMARY KEY (id)
+  );
+/*
+A table which conatins all the members from
+CHANGEDTAMEMEBER table with a new 'status' column
+instead of 4 columns representing each status
+*/
+DROP TABLE statusTaMember;
+CREATE TABLE statusTaMember AS
+  (SELECT * FROM VALIDAGETAMEMBER WHERE 1 = 0
+  );
+--set primary key
+ALTER TABLE statusTaMember ADD CONSTRAINT coPKstatusTaMember PRIMARY KEY (MemberNo);
+ALTER TABLE statusTamember
+DROP column statusstudent;
+ALTER TABLE statusTamember
+DROP column statuspilot;
+ALTER TABLE statusTamember
+DROP column statusascat;
+ALTER TABLE statusTamember
+DROP column statusfullcat;
+ALTER TABLE statusTamember ADD status VARCHAR(50);
+/* */
+DROP TABLE leftJoinedTaMember;
+CREATE TABLE leftJoinedTaMember AS
+  (SELECT * FROM statusTaMember WHERE 1 = 0
+  );
+--set primary key
+ALTER TABLE leftJoinedTaMember ADD CONSTRAINT coPKleftJoinedTaMember PRIMARY KEY (MemberNo);
+--end creating tables
+/*------------------------------------------------------------------------*/
+/*-------------Tables necessary to perform transform on flights tables----*/
+/*------------------------------------------------------------------------*/
+DROP TABLE validDurationTaFlights;
+CREATE TABLE validDurationTaFlights AS
+  (SELECT * FROM taflightsvejle WHERE 1 = 0
+  );
+
+ALTER TABLE validDurationTaFlights ADD CLUB VARCHAR2(50);
+ALTER TABLE validDurationTaFlights DROP COLUMN LAUNCHTIME;
+ALTER TABLE validDurationTaFlights DROP COLUMN LANDINGTIME;
+
+ALTER TABLE validDurationTaFlights ADD LAUNCHDATE DATE;
+ALTER TABLE validDurationTaFlights ADD LANDINGDATE DATE;
+ALTER TABLE validDurationTaFlights ADD LAUNCHTIME VARCHAR2(50);
+ALTER TABLE validDurationTaFlights ADD LANDINGTIME VARCHAR2(50);
+
+DROP TABLE ERRORFLIGHTS;
+CREATE TABLE ERRORFLIGHTS AS
+  (SELECT * FROM validDurationTaFlights WHERE 1 = 0
+  );
+  
+ALTER TABLE ERRORFLIGHTS ADD ERROR_COMMENT VARCHAR2(200);
+
+
+DROP TABLE DURATIONFLIGHTSAUDIT;
+CREATE TABLE DURATIONFLIGHTSAUDIT
+(
+    id NUMBER GENERATED ALWAYS AS IDENTITY(
+    START WITH 1 INCREMENT BY 1),
+    a_date          DATE,    --date when ETL was executed
+    total_extracted INTEGER, --total number of new, changed, deleted members
+    dropped         INTEGER, --number of members with invalid age
+    valid           INTEGER, --number of member with a valid age
+    PRIMARY KEY (id)
 );
 
-/*
-  A table which conatins all the members from
-  CHANGEDTAMEMEBER table with a new 'status' column 
-  instead of 4 columns representing each status
-*/
-drop table statusTaMember;
-create table statusTaMember as (select * 
-                                        from  VALIDAGETAMEMBER where 1 = 0);
+DROP TABLE PILOT1NULLTAFLIGHTS;
+CREATE TABLE pilot1NullTaFlights AS
+  (SELECT * FROM validDurationTaFlights WHERE 1 = 0
+  );
 
---set primary key
-alter table statusTaMember
-  add  constraint coPKstatusTaMember
-  primary key (MemberNo);
+DROP TABLE pilot12EXISTSTaFlights;
+CREATE TABLE pilot12EXISTSTaFlights AS
+  (SELECT * FROM validDurationTaFlights WHERE 1 = 0
+  );
 
-alter table statusTamember drop column statusstudent;
-alter table statusTamember drop column statuspilot;
-alter table statusTamember drop column statusascat;
-alter table statusTamember drop column statusfullcat;
+DROP TABLE pilot2EXISTSTaFlights;
+CREATE TABLE pilot2EXISTSTaFlights AS
+  (SELECT * FROM validDurationTaFlights WHERE 1 = 0
+  );
 
-alter table statusTamember add status varchar(50);
+DROP TABLE validPilotInfoTaFlights;
+CREATE TABLE validPilotInfoTaFlights AS
+  (SELECT * FROM validDurationTaFlights WHERE 1 = 0
+  );
 
-/*
+DROP TABLE ERRORPilotInfoTAFLIGHTS;
+CREATE TABLE ERRORPilotInfoTAFLIGHTS AS
+  (SELECT * FROM validDurationTaFlights WHERE 1 = 0
+  );
 
-*/
+DROP TABLE PilotInfoFLIGHTSAUDIT;
+CREATE TABLE PilotInfoFLIGHTSAUDIT
+(
+    id NUMBER GENERATED ALWAYS AS IDENTITY(
+    START WITH 1 INCREMENT BY 1),
+    a_date          DATE,    --date when ETL was executed
+    total_extracted INTEGER, --total number of new, changed, deleted members
+    dropped         INTEGER, --number of members with invalid age
+    valid           INTEGER, --number of member with a valid age
+    PRIMARY KEY (id)
+);
 
-drop table leftJoinedTaMember;
-create table leftJoinedTaMember as (select * 
-                                        from  statusTaMember where 1 = 0);
---set primary key
-alter table leftJoinedTaMember
-  add  constraint coPKleftJoinedTaMember
-  primary key (MemberNo);
-
---end creating tables

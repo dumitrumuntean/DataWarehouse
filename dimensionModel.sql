@@ -28,6 +28,7 @@ CREATE TABLE d_memberprofile
     START WITH 1 INCREMENT BY 1) ,
     member_no     NUMBER(6,0) REFERENCES d_member(memberno),
     name          VARCHAR2(60),
+    initials      CHAR(4),
     age           DECIMAL(3,1),
     address       VARCHAR(50),
     member_status VARCHAR2(50),
@@ -41,9 +42,9 @@ CREATE TABLE d_plane
   (
     id NUMBER GENERATED ALWAYS AS IDENTITY(
     START WITH 1 INCREMENT BY 1),
-    registration VARCHAR2(20),
+    registration  VARCHAR2(20),
     COMPETITIONNO VARCHAR2(10),
-    type         VARCHAR2(20),
+    type          VARCHAR2(20),
     PRIMARY KEY (id)
   );
 DROP TABLE f_flight CASCADE CONSTRAINTS;
@@ -144,4 +145,29 @@ INSERT INTO D_LAUNCHMETHOD
   (LAUNCH_METHOD
   ) VALUES
   ( 'CableBreak'
+  );
+/*Adding a member PASS in D_MEMBER and D_MEMBERPROFILE*/
+INSERT
+INTO D_MEMBER
+  (
+    MEMBERNO
+  )
+  VALUES
+  (
+    999999
+  );
+INSERT
+INTO D_MEMBERPROFILE
+  (
+    MEMBER_NO,
+    NAME,
+    INITIALS,
+    SEX
+  )
+  VALUES
+  (
+    999999,
+    'PASS',
+    'PASS',
+    'M'
   );
