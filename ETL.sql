@@ -13,7 +13,9 @@ A script to be runned when ETL is to be performed.
 @@changedMembersLoad
 @@planesLoad
 /*TRANSFORM FACT FLIGHT*/
-@@validateDurationFlights(Transform)
-@@validatePilotInfoFlights
+@@validateDurationFlightsTransform
+@@validatePilotInfoFlightsTransform
+@@flightsLoad
 
-TRUNCATE TABLE LEFTJOINEDTAMEMBER;
+--COMPLETING AUDIT
+@@audit

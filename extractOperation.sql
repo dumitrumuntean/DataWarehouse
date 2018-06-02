@@ -747,34 +747,4 @@ from CHANGEDEXTCLASS
  group by operation
  ;
  
- --!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!---
- -- Not extracted changed.... dont know why ----------------------------------
- -----------------------------------------------------------------------------
-
------------------------------------trucate
-/*
-truncate table YESTERDAYTAFLIGHTSVEJLE;
-truncate table YESTERDAYTAFLIGHTSSG70;
-truncate table YESTERDAYEXTPLANES;
-truncate table YESTERDAYEXTCLASS;
-truncate table YESTERDAYTACLUB;
-truncate table YESTERDAYTAREGION;
-truncate table YESTERDAYTAMEMBER;
-*/
-
-/*
-truncate table CHANGEDTAMEMBER;
-truncate table CHANGEDTAFLIGHTSVEJLE;
-truncate table CHANGEDTAFLIGHTSSG70;
-truncate table CHANGEDEXTPLANES;
-truncate table CHANGEDEXTCLASS;
-truncate table CHANGEDTACLUB;
-truncate table CHANGEDTAREGION;
-*/
----------------------------selects
---select * from YESTERDAYTAMEMBER;
---select * from CHANGEDTAMEMBER;
---select * from YESTERDAYTAFLIGHTSSG70;
---select * from TAFLIGHTSSG70;
---select count(*) from TAFLIGHTSSG70;
-
+   TRUNCATE TABLE ERRORFLIGHTS;

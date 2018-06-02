@@ -1,4 +1,4 @@
-DROP TABLE D_LaunchMethod;
+DROP TABLE D_LaunchMethod CASCADE CONSTRAINTS;
 CREATE TABLE D_LaunchMethod
   (
     id NUMBER GENERATED ALWAYS AS IDENTITY(
@@ -40,31 +40,30 @@ CREATE TABLE d_memberprofile
 DROP TABLE d_plane CASCADE CONSTRAINTS;
 CREATE TABLE d_plane
   (
-    id NUMBER GENERATED ALWAYS AS IDENTITY(
-    START WITH 1 INCREMENT BY 1),
     registration  VARCHAR2(20),
     COMPETITIONNO VARCHAR2(10),
     type          VARCHAR2(20),
-    PRIMARY KEY (id)
+    PRIMARY KEY (registration)
   );
 DROP TABLE f_flight CASCADE CONSTRAINTS;
 CREATE TABLE f_flight
   (
-    id NUMBER GENERATED ALWAYS AS IDENTITY(
-    START WITH 1 INCREMENT BY 1),
+    id           VARCHAR2(50),
     d_club       INTEGER,
-    d_plane      INTEGER,
-    member_id    NUMBER(6,0),
+    d_plane      VARCHAR2(10),
     launch_time  INTEGER,
     landing_time INTEGER,
-    ddate        INTEGER,
+    LAUNCH_date        INTEGER,
+    LANDING_date        INTEGER,
+    LAUNCH_METHOD   NUMBER(10,0),
     PRIMARY KEY(id),
     CONSTRAINT fk_club FOREIGN KEY(d_club) REFERENCES d_club(id),
-    CONSTRAINT fk_plane FOREIGN KEY(d_plane) REFERENCES d_plane(id),
+--    CONSTRAINT fk_plane FOREIGN KEY(d_plane) REFERENCES d_plane(registration),
     CONSTRAINT fk_launch FOREIGN KEY (launch_time) REFERENCES d_time(id),
     CONSTRAINT fk_landing FOREIGN KEY (landing_time) REFERENCES d_time(id),
-    CONSTRAINT fk_memberidd FOREIGN KEY (member_id) REFERENCES d_memberprofile(id),
-    CONSTRAINT fk_date FOREIGN KEY (ddate) REFERENCES d_date(id)
+    CONSTRAINT fk_LAUNCHdate FOREIGN KEY (LAUNCH_date) REFERENCES d_date(id),
+    CONSTRAINT fk_LANDINGdate FOREIGN KEY (LANDING_date) REFERENCES d_date(id),
+    CONSTRAINT fk_LAUNCHMETHOD FOREIGN KEY (LAUNCH_METHOD) REFERENCES D_LAUNCHMETHOD(ID)
   );
 DROP TABLE f_membership CASCADE CONSTRAINTS;
 CREATE TABLE f_membership
@@ -87,12 +86,12 @@ CREATE TABLE f_ownership
     id NUMBER GENERATED ALWAYS AS IDENTITY(
     START WITH 1 INCREMENT BY 1),
     member_id INTEGER,
-    plane_id  INTEGER,
+    plane_id  VARCHAR2(10),
     date_from INTEGER,
     date_to   INTEGER,
     PRIMARY KEY(id),
     CONSTRAINT fk_owner_member FOREIGN KEY(member_id) REFERENCES d_member(memberno),
-    CONSTRAINT fk_owns_plane FOREIGN KEY(plane_id) REFERENCES d_plane(id),
+    CONSTRAINT fk_owns_plane FOREIGN KEY(plane_id) REFERENCES d_plane(REGISTRATION),
     CONSTRAINT fk_from FOREIGN KEY(date_from) REFERENCES d_date(id),
     CONSTRAINT fk_to FOREIGN KEY(date_to) REFERENCES d_date(id)
   );
@@ -102,12 +101,12 @@ CREATE TABLE f_club_ownership
     id NUMBER GENERATED ALWAYS AS IDENTITY(
     START WITH 1 INCREMENT BY 1),
     club_id   INTEGER,
-    plane_id  INTEGER,
+    plane_id  VARCHAR2(10),
     date_from INTEGER,
     date_to   INTEGER,
     PRIMARY KEY(id),
     CONSTRAINT fk_clubownership FOREIGN KEY(club_id) REFERENCES d_club(id),
-    CONSTRAINT fk_club_owns_plane FOREIGN KEY(plane_id) REFERENCES d_plane(id),
+    CONSTRAINT fk_club_owns_plane FOREIGN KEY(plane_id) REFERENCES d_plane(REGISTRATION),
     CONSTRAINT fk_dfrom FOREIGN KEY(date_from) REFERENCES d_date(id),
     CONSTRAINT fk_dto FOREIGN KEY(date_to) REFERENCES d_date(id)
   );
@@ -119,6 +118,16 @@ CREATE TABLE D_REGION
     NAME VARCHAR2(50),
     PRIMARY KEY(ID)
   );
+
+DROP TABLE BRIDGE_FLIGHT_MEMBER CASCADE CONSTRAINTS;
+CREATE TABLE BRIDGE_FLIGHT_MEMBER
+(
+  FLIGHT_ID VARCHAR2(50),
+  MEMBER_ID NUMBER,
+  CROSSCOUNTRYKM NUMBER(4,0),
+  CONSTRAINT fk_FLIGHT_ID FOREIGN KEY(FLIGHT_ID) REFERENCES F_FLIGHT(id),
+  CONSTRAINT fk_MEMBER_ID FOREIGN KEY(MEMBER_ID) REFERENCES D_MEMBERPROFILE(id)
+);
 /*There are only 4(four) launch methods. Therefore,
 we find it a resonable decesion to populate the dimension
 D_LAUNCHMETHOD manually. */
@@ -129,22 +138,22 @@ INTO D_LAUNCHMETHOD
   )
   VALUES
   (
-    'LaunchAerotow'
+    'LAUNCHAEROTOW'
   );
 INSERT INTO D_LAUNCHMETHOD
   (LAUNCH_METHOD
   ) VALUES
-  ( 'LaunchWinch'
+  ( 'LAUNCHWINCH'
   );
 INSERT INTO D_LAUNCHMETHOD
   (LAUNCH_METHOD
   ) VALUES
-  ( 'LaunchSelfLaunch'
+  ( 'LAUNCHSELFLAUNCH'
   );
 INSERT INTO D_LAUNCHMETHOD
   (LAUNCH_METHOD
   ) VALUES
-  ( 'CableBreak'
+  ( 'CABLEBREAK'
   );
 /*Adding a member PASS in D_MEMBER and D_MEMBERPROFILE*/
 INSERT
@@ -171,3 +180,20 @@ INTO D_MEMBERPROFILE
     'PASS',
     'M'
   );
+
+/*Audit table necessary to register information about the etl process*/
+DROP TABLE AUDIT_TABLE;
+
+CREATE TABLE AUDIT_TABLE
+(
+    id NUMBER GENERATED ALWAYS AS IDENTITY(
+    START WITH 1 INCREMENT BY 1),
+    AUDIT_DATE DATE,
+    MEMBERS_EXTRACTED INTEGER,
+    MEMBERS_DROPPED INTEGER,
+    MEMBERS_VALID INTEGER,
+    FLIGHTS_EXTRACTED INTEGER,
+    FLIGHTS_DROPPED INTEGER,
+    FLIGHTS_VALID INTEGER,
+    PRIMARY KEY(ID)
+);

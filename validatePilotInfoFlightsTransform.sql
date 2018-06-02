@@ -1,6 +1,6 @@
 /*
   Flights with invalid pilot info will not be accepeted and will be thrown 
-  in error table.
+  into an error table.
   Flights with invalid pilot info is considered to be fights whose pilot
   initials are not in D_MEMBER table;
 */
@@ -150,3 +150,18 @@ INSERT INTO VALIDPILOTINFOTAFLIGHTS
         SELECT INITIALS FROM D_MEMBERPROFILE) AND 
         TRIM(PILOT2INIT) IS NOT NULL
         );
+  
+  /*COMPLETING AUDIT TABLE WITH NECESSARY INFORMATION*/
+    INSERT INTO PILOTINFOFLIGHTSAUDIT
+    (
+      A_DATE,
+      TOTAL_EXTRACTED,
+      DROPPED,
+      VALID,
+      CHECKED
+    )VALUES(
+      SYSDATE,
+      (SELECT COUNT(*) FROM VALIDDURATIONTAFLIGHTS),
+      ((SELECT COUNT(*) FROM VALIDDURATIONTAFLIGHTS)- (SELECT COUNT(*) FROM VALIDPILOTINFOTAFLIGHTS)),
+      (SELECT COUNT(*) FROM VALIDPILOTINFOTAFLIGHTS),
+      'N'); 

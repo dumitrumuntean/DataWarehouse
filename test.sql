@@ -20,11 +20,21 @@ select * from tamember;
 
 select * from LEFTJOINEDTAMEMBER;
 
+
+
 SELECT * FROM D_DATE;
 
 @@ETL
 @@install
 
+insert into taFlightsVejle (launchTime, landingTime, planeRegistration, pilot1Init, pilot2Init, launchAerotow, launchWinch,launchSelfLaunch, cableBreak, CrossCountryKm)  values ( to_date('2015-05-15 10:34', 'YYYY-MM-DD HH24:MI' ) ,  to_date('2015-05-15 11:54', 'YYYY-MM-DD HH24:MI' ) , 'XXX' , 'LOAH' , '    ' , 'N' , 'N' , 'Y' , 'N' ,    0);
+
+SELECT * FROM D_MEMBERPROFILE;
+SELECT * FROM AUDIT_TABLE;
+SELECT * FROM CHANGEDTAMEMBER;
+select * from DURATIONFLIGHTSAUDIT;
+SELECT * FROM LEFTJOINEDTAMEMBER;
+truncate table AUDIT_TABLE;
 select launchtime, landingtime, 24*(landingtime - launchtime) from taflightsSG70; -- where 24*(landingtime - launchtime) > 10;
 
 

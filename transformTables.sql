@@ -71,6 +71,7 @@ CREATE TABLE ageMemberAudit
     total_extracted INTEGER, --total number of new, changed, deleted members
     dropped         INTEGER, --number of members with invalid age
     valid           INTEGER, --number of member with a valid age
+    CHECKED         CHAR,
     PRIMARY KEY (id)
   );
 /*
@@ -120,7 +121,7 @@ ALTER TABLE validDurationTaFlights ADD LANDINGTIME VARCHAR2(50);
 
 DROP TABLE ERRORFLIGHTS;
 CREATE TABLE ERRORFLIGHTS AS
-  (SELECT * FROM validDurationTaFlights WHERE 1 = 0
+  (SELECT * FROM taflightsvejle WHERE 1 = 0
   );
   
 ALTER TABLE ERRORFLIGHTS ADD ERROR_COMMENT VARCHAR2(200);
@@ -135,21 +136,25 @@ CREATE TABLE DURATIONFLIGHTSAUDIT
     total_extracted INTEGER, --total number of new, changed, deleted members
     dropped         INTEGER, --number of members with invalid age
     valid           INTEGER, --number of member with a valid age
+    CHECKED         CHAR,
+    PRIMARY KEY (id)
+);
+
+DROP TABLE PILOTINFOFLIGHTSAUDIT;
+CREATE TABLE PILOTINFOFLIGHTSAUDIT
+(
+    id NUMBER GENERATED ALWAYS AS IDENTITY(
+    START WITH 1 INCREMENT BY 1),
+    a_date          DATE,    --date when ETL was executed
+    total_extracted INTEGER, --total number of new, changed, deleted members
+    dropped         INTEGER, --number of members with invalid age
+    valid           INTEGER, --number of member with a valid age
+    CHECKED         CHAR,
     PRIMARY KEY (id)
 );
 
 DROP TABLE PILOT1NULLTAFLIGHTS;
 CREATE TABLE pilot1NullTaFlights AS
-  (SELECT * FROM validDurationTaFlights WHERE 1 = 0
-  );
-
-DROP TABLE pilot12EXISTSTaFlights;
-CREATE TABLE pilot12EXISTSTaFlights AS
-  (SELECT * FROM validDurationTaFlights WHERE 1 = 0
-  );
-
-DROP TABLE pilot2EXISTSTaFlights;
-CREATE TABLE pilot2EXISTSTaFlights AS
   (SELECT * FROM validDurationTaFlights WHERE 1 = 0
   );
 
@@ -163,15 +168,10 @@ CREATE TABLE ERRORPilotInfoTAFLIGHTS AS
   (SELECT * FROM validDurationTaFlights WHERE 1 = 0
   );
 
-DROP TABLE PilotInfoFLIGHTSAUDIT;
-CREATE TABLE PilotInfoFLIGHTSAUDIT
-(
-    id NUMBER GENERATED ALWAYS AS IDENTITY(
-    START WITH 1 INCREMENT BY 1),
-    a_date          DATE,    --date when ETL was executed
-    total_extracted INTEGER, --total number of new, changed, deleted members
-    dropped         INTEGER, --number of members with invalid age
-    valid           INTEGER, --number of member with a valid age
-    PRIMARY KEY (id)
-);
+
+/*A table used when loading flights*/
+DROP TABLE LOAD_MEMBER_PROFILE;
+
+CREATE TABLE LOAD_MEMBER_PROFILE AS
+(SELECT * FROM D_MEMBERPROFILE WHERE 1 = 0);
 
